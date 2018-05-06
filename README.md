@@ -7,3 +7,4 @@ Hi! My name is Alex Mamontov and I've started this project to hit a range of pro
 ### Table of contents:
 
 - [16-03-2018: PHP dateTime tips and features](tips/16-03-2018/)
+- [06-05-2018: Symfony events type differences](tips/06-05-2018/)

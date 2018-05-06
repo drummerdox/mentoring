@@ -1,14 +1,10 @@
-PHP 5 is very very flexible in accessing member variables and member functions. 
-These access methods maybe look unusual and unnecessary at first glance; but they are very useful sometimes; s
-pecially when you work with SimpleXML classes and objects. I have posted a similar comment in SimpleXML function reference section, 
-but this one is more comprehensive. 
-
 Недавно на одном из проектов было большое количество задач связанных с датами.
 Про некоторые из них я напишу ниже.
 
 И так.
 
 Объекты в PHP передаются по ссылке, из - за этого такой код, будет менять родительскую переменную.
+Нужно быть очень внимательным, передавай такие аргументы в функцию.
 
 $currentDate = new DateTime();
 
@@ -21,9 +17,26 @@ $currentDate = new DateTime();
 $nextWeekDate = clone $currentDate;
 $nextWeekDate = $nextWeekDate->modify('+1 week');
 
-1)в часах и минутах
-2) TimeZone issye
+1)О часах и минутах
 
+Еще одна ошибка, которую можно совершить случайно это добавить избыточную точность в базу данных и избыточную невнимательность в код. 
+Например, если вы ищите дату найма сотрудника в базе с таким форматом, и то ждите пробем.
+
+//формат хранения данных в бд
+//hide_date = 2018-01-13 14:23:12
+$intervalOneMonth = new DateTime('-1 week');
+
+$intervalOneMonth содержит "2018-04-30 13:04:28.000000" (не пугайтесь, это php 7.1 поэтому есть еще и милисекунды)
+
+Результат поиска у вас будет разный, в зависимости от времни суток :)
+Дело в том, что new DateTime(), создает еще и временную метку.
+
+Для упрощения можно не косячить с бд или ипользовать ->setTime(), сделать кастомный класс для работы с датами или пользоваться Carbon lib. 
+https://github.com/briannesbitt/Carbon
+
+
+2) TimeZone issue
 3) DateInterval интервалы неправиьные
-4)DateTimeImmutable
-5) добавление формата в конструктор
+4) DateTimeImmutable
+
+Если вы заметили, то в статье я пользовался станным синтаксисом new DateTime('-1 week'), казалось бы что за дичь и где почитай по ней доки? Но все проще, это лишь вариант использования метода format, описание котого уже есть на php.net
